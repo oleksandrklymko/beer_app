@@ -1,0 +1,14 @@
+require: rubocop-rails
+
+AllCops:
+  SuggestExtensions: false
+  NewCops: enable
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
