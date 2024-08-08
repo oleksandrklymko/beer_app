@@ -16,26 +16,39 @@ class BeersController < ApplicationController
     @beers = if query.present? && query.length > 3
                search_beers(query)
              else
-               []
+               fetch_beers
              end
 
     respond_to do |format|
+      format.turbo_stream # This will look for search.turbo_stream.erb
       format.html { render :index }
-      format.turbo_stream
     end
   end
 
   private
 
   def fetch_beers
-    uri = URI(FETCH_BEERS_URL)
-    response = Net::HTTP.get(uri)
-    @beers = JSON.parse(response)
+    @beers = fetch_from_api(FETCH_BEERS_URL)
+  rescue StandardError => e
+    Rails.logger.error "Error fetching beers: #{e.message}"
+    @beers = []
   end
 
   def search_beers(query)
-    uri = URI("#{SEARCH_BEERS_URL}?query=#{query}&per_page=#{PER_PAGE_LIMIT}")
+    uri = URI(SEARCH_BEERS_URL)
+    uri.query = URI.encode_www_form(query:, per_page: PER_PAGE_LIMIT)
+    fetch_from_api(uri)
+  rescue StandardError => e
+    Rails.logger.error "Error searching beers: #{e.message}"
+    []
+  end
+
+  def fetch_from_api(url)
+    uri = URI(url)
     response = Net::HTTP.get(uri)
     JSON.parse(response)
+  rescue JSON::ParserError => e
+    Rails.logger.error "Error parsing JSON: #{e.message}"
+    []
   end
 end

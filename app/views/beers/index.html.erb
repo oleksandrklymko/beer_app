@@ -1,8 +1,8 @@
 <div class="container mt-4">
   <h1>Beers</h1>
 
-  <%= form_with url: search_beers_path, method: :get, local: false, id: "beer-search-form" do %>
-    <%= text_field_tag :query, nil, placeholder: "Search Beers", class: "form-control", data: { action: "input->beer-search#search" } %>
+  <%= form_with url: search_beers_path, method: :get, local: false, id: "beer-search-form", data: { controller: "beer-search", action: "input->beer-search#search", turbo_frame: "beer-list" } do %>
+    <%= text_field_tag :query, params[:query], placeholder: "Search Beers", class: "form-control", data: { beer_search_target: "input" } %>
   <% end %>
 
   <br>
