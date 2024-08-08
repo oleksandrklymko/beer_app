@@ -2,6 +2,9 @@
 
 import { application } from "controllers/application"
 
+import BeerSearchController from "./beer_search_controller"
+application.register("beer-search", BeerSearchController)
+
 // Eager load all controllers defined in the import map under controllers/**/*_controller
 import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
 eagerLoadControllersFrom("controllers", application)
