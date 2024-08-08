@@ -20,7 +20,7 @@ class BeersController < ApplicationController
              end
 
     respond_to do |format|
-      format.turbo_stream # This will look for search.turbo_stream.erb
+      format.turbo_stream
       format.html { render :index }
     end
   end
